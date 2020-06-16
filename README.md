@@ -1,7 +1,24 @@
-# to
-se
-Foobar is a Python library for dealing with word pluralization.
-https://img.shields.io/badge/license-MIT-blue.svg
+
+# Homework 2:CSS
+
+##License
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
+
+## Description
+To use CSS to create a HTML
+
 ## Installation
-[MIT](https://choosealicense.com/licenses/mit/)
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Command to install dependencies
+util
+
+##Usage
+In order to understand how to style HTMLs
+
+##Contributions
+By donating to a charity of their choice!
+
+##Questions
+You will be able to reach me at:
+kyle@pingue.com
+Or by contacting me via by Github account:
+kylep90

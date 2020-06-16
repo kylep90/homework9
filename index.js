@@ -1,27 +1,13 @@
-// const questions = [
-
-
-// ];
-
-// function writeToFile(fileName, data) {
-// }
-
-// function init() {
-
-// }
-
-// init();
 
 const inquirer = require("inquirer");
 const fs = require("fs");
+const path = require("path");
 const util = require("util");
-const Choice = require("inquirer/lib/objects/choice");
-const Choices = require("inquirer/lib/objects/choices");
 
-const writeFileAsync = util.promisify(fs.writeFile);
+const generateMarkDown = require ("./utils/generateMarkdown")
 
-function promptUser() {
-  return inquirer.prompt([
+const questions = 
+  [
     {
       type: "input",
       name: "username",
@@ -37,104 +23,57 @@ function promptUser() {
       name: "description",
       message: "What is the project description?"
     },
-  //   {
-  //       type: "list",
-  //       name: "tableOfContents",
-  //       message: "What should your Table of Contents include?",
-  //       choices: ["Title","Description","Table of Contents",]
-  // // * Installation
-  // // * Usage
-  // // * License
-  // // * Contributing
-  // // * Tests
-  // // * Questions"]
-  //     },
-    // {
-    //   type: "input",
-    //   name: "installation",
-    //   message: "What installations does your project need?"
-    // },
-    // {
-    //     type: "input",
-    //     name: "usage",
-    //     message: "What is the project usage?"
-    //   },
-    // {
-    //   type: "list",
-    //   name: "license",
-    //   message: "What is the project license?"
-    // },
-    // {
-    //     type: "input",
-    //     name: "contributing",
-    //     message: "Who has ?"
-    //   },
+    {
+        type: "checkbox", //user is able to make multiple choices from the given list
+        name: "tableOfContents",
+        message: "What should your Table of Contents include?",
+        choices: ["Installation", "Usage", "License","Contributing", "Tests", "Questions"]
+      },
+    {
+      type: "input",
+      name: "installation",
+      message: "What commands should someone run to install your project?",
+      default: "npm i"
+    },
+    {
+        type: "input",
+        name: "usage",
+        message: "How and why would someone use this project?"
+      },
+    {
+      type: "list", 
+      name: "license",
+      message: "What is the project license?",
+      choices: ["MIT", "BSD 3", "NONE"]
+    },
+    {
+        type: "input",
+        name: "contributing",
+        message: "How can someone contribute to this project?" // e.g. donations
+      },
 
-    // {
-    //   type: "input",
-    //   name: "tests",
-    //   message: "What are the project's tests?"
-    // },
-    // {
-    //   type: "input",
-    //   name: "questions",
-    //   message: "What are the project's questions?"
-    // },
-]);
+    {
+      type: "input",
+      name: "tests",
+      message: "What commands are used in order to run the tests?"
+    },
+    {
+      type: "input",
+      name: "questions",
+      message: "If you have any questions, you will be able to reach me at:  " //github user
+    },
+];
+
+function generateReadMe(fileName, data){
+  return fs.writeFileSync(path.join(process.cwd(), fileName), data)
 }
 
-function generateReadMe(response){
-    return `# ${response.title}
-${response.description}
-Foobar is a Python library for dealing with word pluralization.
-https://img.shields.io/badge/license-MIT-blue.svg
-## Installation
-[MIT](https://choosealicense.com/licenses/mit/)
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.`
-//    return `# ${response.title}
-
-//     Your description is as follows  ${response.description}`;
-    
-    // ## Installation
-    
-    // Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-    
-    // ```bash
-    // pip install foobar
-    // ```
-    
-    // ## Usage
-    
-    // ```python
-    // import foobar
-    
-    // foobar.pluralize('word') # returns 'words'
-    // foobar.pluralize('goose') # returns 'geese'
-    // foobar.singularize('phenomena') # returns 'phenomenon'
-    // ```
-    
-    // ## Contributing
-    // Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-    
-    // Please make sure to update tests as appropriate.
-    
-    // ## License
-    // [MIT](https://choosealicense.com/licenses/mit/)`
-
+function promptUser(){
+  inquirer.prompt(questions)
+  .then(function(response){
+    console.log("Generating ReadMe file.")
+    generateReadMe("README.md", generateMarkDown({...response}));
+  })
 }
 
-promptUser()
-  .then(function(response) {
-    const readMe = generateReadMe(response);
-    console.log(response.title);
-    console.log(generateReadMe(response));
-    console.log(readMe);
-
-    return writeFileAsync("README.md", readMe);
-  })
-  .then(function() {
-    console.log("Successfully created your ReadMe");
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+promptUser();
